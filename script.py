@@ -16,7 +16,13 @@ def main():
 	#language = response['output']
 
 	messages = messages[1:]
-	print messages    
+	response = paralleldots.batch_emotion(messages)
+
+	emotions = []
+	for result in response['batch']:
+		emotions.append(result['emotion']['emotion'])
+
+	print emotions    
 
 if __name__ == '__main__':
     main()
