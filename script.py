@@ -2,7 +2,7 @@ import csv
 import paralleldots
 
 API_KEY = "mfEFDGHIALHCwJSDLx5uTsBrxtmn1Ol2yqkz1uIk7bI"
-
+TEST_MESSAGES=["Thank you for your message", "Danke fur deine text"]
 
 def main():
 	paralleldots.set_api_key(API_KEY)
@@ -23,6 +23,15 @@ def main():
 		emotions.append(result['emotion']['emotion'])
 
 	print emotions    
+
+	response = paralleldots.batch_language_detection(messages)
+
+	languages = []
+
+	for result in response['batch']:
+		languages.append(result['output'])
+
+	print languages    
 
 if __name__ == '__main__':
     main()
