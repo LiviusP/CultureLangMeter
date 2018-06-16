@@ -13,34 +13,35 @@ def main():
 		for row in reader:
 			messages.append(row[2])
 
-	#response = paralleldots.language_detection(message)
-	#language = response['output']
-
 	messages = messages[1:]
-	response = paralleldots.batch_emotion(messages)
+
 
 	emotions = []
+	response = paralleldots.batch_emotion(messages)
 	for result in response['batch']:
 		emotions.append(result['emotion']['emotion'])
 
-	response = paralleldots.batch_language_detection(messages)
-
 	languages = []
-
+	response = paralleldots.batch_language_detection(messages)
 	for result in response['batch']:
 		languages.append(result['output'])
 
+	sentiments = []
+	response = paralleldots.batch_sentiment(messages)
+	for result in response['batch']:
+		sentiments.append(result['sentiment'])
+	
 	data = {}
 
 	data['languages'] = languages
 	data['emotions'] = emotions
+	data['sentiments'] = sentiments
 
 	generareRaport(data)
 
 
 def generareRaport(data):
 
-	print data
 	wb = xlwt.Workbook()
 	style_percent = xlwt.easyxf(num_format_str='0.00%')
 
