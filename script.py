@@ -1,6 +1,7 @@
 import csv
 import paralleldots
 import xlwt
+import operator
 
 API_KEY = "mfEFDGHIALHCwJSDLx5uTsBrxtmn1Ol2yqkz1uIk7bI"
 TEST_MESSAGES=["Thank you for your message", "Danke fur deine text"]
@@ -15,21 +16,21 @@ def main():
 
 	messages = messages[1:]
 
-
 	emotions = []
 	response = paralleldots.batch_emotion(messages)
-	for result in response['batch']:
-		emotions.append(result['emotion']['emotion'])
+	emotions = prelucrareRaspuns(response['emotion'])
+
 
 	languages = []
 	response = paralleldots.batch_language_detection(messages)
-	for result in response['batch']:
+	for result in response['lang_detection']:
 		languages.append(result['output'])
+
 
 	sentiments = []
 	response = paralleldots.batch_sentiment(messages)
-	for result in response['batch']:
-		sentiments.append(result['sentiment'])
+	sentiments = prelucrareRaspuns(response['sentiment'])
+
 	
 	data = {}
 
@@ -38,6 +39,16 @@ def main():
 	data['sentiments'] = sentiments
 
 	generareRaport(data)
+
+def prelucrareRaspuns(data):
+	
+	response = []
+	for result in data:
+		response.append(max(result.iteritems(), key=operator.itemgetter(1))[0])
+
+
+	return response
+
 
 
 def generareRaport(data):
